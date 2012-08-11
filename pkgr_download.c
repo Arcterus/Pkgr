@@ -455,7 +455,7 @@ bool install(Package *package) {
 }
 
 bool uninstall(Package *package) {
-    
+  return true;
 }
 
 /**
@@ -565,12 +565,12 @@ int main(const int argc, char *argv[]) {
         download_file(argv[2], argv[3], true);
     } else if(!strcmp(argv[1], "unpack")) {
         Package *pack = new_Package();
-        if(strstr(argv[2], ".kpkg") == NULL) 
+        if(strstr(argv[2], ".kpkg") == NULL) {
             pack->name = argv[2];
-            unpack(&pack, true);
+            unpack(pack, true);
         } else {
             strncpy(pack->name, argv[2], strlen(argv[2]) - 5);
-            unpack(&pack, false);
+            unpack(pack, false);
         }
     } else if(!strcmp(argv[1], "checksum")) {
         char checksum[69];
