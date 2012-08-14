@@ -1,7 +1,7 @@
 CC = clang
-LDFLAGS = -L/usr/local/lib -lcurl -larchive -lconfig -llua -lcrypto
+LDFLAGS = -I./include -L/usr/local/lib -lcurl -larchive -lconfig -llua -lcrypto
 CFLAGS = -c -I/usr/local/include
-SOURCES = pkgr_download.c
+SOURCES = src/pkgr_download.c src/checksum.c
 OBJECTS = $(SOURCES:.c=.o)
 EXECUTABLE = pkgr
 
