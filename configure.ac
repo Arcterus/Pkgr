@@ -1,5 +1,5 @@
 AC_INIT(src/lib/pkgr.c)  # makes sure build directory is correct
-CFLAGS="${CFLAGS=} -Os"
+CFLAGS="${CFLAGS=} -Os -I./include"
 AC_PREREQ(2.12)  # depends on autoconf version >= 2.12
 AC_CANONICAL_SYSTEM
 AM_SANITY_CHECK

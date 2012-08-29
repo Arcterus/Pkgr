@@ -14,9 +14,6 @@
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
-#include <checksum.h>
-#include <download.h>
-#include <unpack.h>
 
 #ifndef TARGET
     #ifdef __APPLE__
@@ -74,7 +71,7 @@
  * @date 2012-07-30
  * @since 2012-07-30
  */
-#define pkgr_error(text, ...) fprintf(stderr, bold red "Error: " text "\n" normal, ##__VA_ARGS__)
+#define pkgr_error(text, ...) fprintf(stderr, BOLD RED "Error: " text "\n" NORMAL, ##__VA_ARGS__)
 #endif
 
 #ifndef pkgr_warning
@@ -88,7 +85,7 @@
  * @date 2012-07-30
  * @since 2012-07-30
  */
-#define pkgr_warning(text, ...) fprintf(stderr, bold yellow "Warning: " text "\n" normal, ##__VA_ARGS__)
+#define pkgr_warning(text, ...) fprintf(stderr, BOLD YELLOW "Warning: " text "\n" NORMAL, ##__VA_ARGS__)
 #endif
 
 /**
@@ -114,5 +111,9 @@ bool pkgr_load_pkgbuild(Package *package);
 void pkgr_cleanup();
 Package *new_Package();
 void pkgr_init();
+
+#include <pkgr/checksum.h>
+#include <pkgr/download.h>
+#include <pkgr/unpack.h>
 
 #endif
