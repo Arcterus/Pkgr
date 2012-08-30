@@ -53,10 +53,10 @@ bool pkgr_load_pkgbuild(Package *package) {
  *
  * @see repos
  *
- * @date 2012-08-01
+ * @date 2012-08-29
  * @since 2012-08-01
  */
-void cleanup() {
+void pkgr_cleanup() {
     free(pkgr_repos);
     lua_close(state);
 }
@@ -67,7 +67,7 @@ Package *new_Package() {
     return package;
 }
 
-void init() {
+void pkgr_init() {
     gid_t gids[100];
     int gcount;
     if((gcount = getgroups(sizeof(gids) / sizeof(gids[0]), gids)) == -1) {

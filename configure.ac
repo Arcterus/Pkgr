@@ -22,9 +22,17 @@ AC_C_CONST
 AC_SUBST(CFLAGS)
 BUILD_OPS="lib cmd"
 AC_ARG_ENABLE([command], AS_HELP_STRING([--disable-command], [disable command-line program]))
-AM_CONDITIONAL([COMMAND], [test "x$enable_command" = "xno"])
+PKGR=pkgr
+if test "x$enable_command" = "xno"; then
+  PKGR=
+fi
+AC_SUBST(PKGR)
 AC_ARG_ENABLE([graphics], AS_HELP_STRING([--enable-graphics], [enable graphical front-end]))
-AM_CONDITIONAL([GRAPHICS], [test "x$enable_graphics" = "xyes"])
+LIBS=
+if test "x$enable_graphics" = "xno"; then
+  LIBS=$LIBS libpkgr_gfx.la
+fi
+AC_SUBST(LIBS)
 AC_CONFIG_HEADERS([include/pkgr/build-config.h])
 AC_CONFIG_FILES([
   Makefile
