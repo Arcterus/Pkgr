@@ -11,6 +11,10 @@ char *pkgr_generate_checksum(char *filename, char *hexdigest) {
     EVP_MD_CTX *ctx = EVP_MD_CTX_create();
     EVP_DigestInit_ex(ctx, md, NULL);
     FILE *dfile = fopen(filename, "rb");
+    if(dfile == NULL) {
+        pkgr_error("Invalid file (%s)", filename);
+        exit(1);
+    }
     while(!feof(dfile)) {
         char data[1024];
         size_t size = fread(data, sizeof(char), sizeof(data), dfile);

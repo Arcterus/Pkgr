@@ -18,6 +18,11 @@ AC_CHECK_HEADERS(sys/ioctl.h)
 AC_CHECK_HEADERS(sys/stat.h)
 AC_CHECK_HEADERS(sys/types.h)
 AC_CHECK_HEADERS(libconfig.h)
+AC_CHECK_LIB(config, config_init)
+AC_CHECK_LIB(curl, curl_easy_init)
+AC_CHECK_LIB(archive, archive_read_new)
+AC_CHECK_LIB(lua, luaL_newstate)
+AC_CHECK_LIB(crypto, OpenSSL_add_all_digests)
 AC_C_CONST
 AC_SUBST(CFLAGS)
 BUILD_OPS="lib cmd"
@@ -28,11 +33,11 @@ if test "x$enable_command" = "xno"; then
 fi
 AC_SUBST(PKGR)
 AC_ARG_ENABLE([graphics], AS_HELP_STRING([--enable-graphics], [enable graphical front-end]))
-LIBS=
+PKGRLIBS=
 if test "x$enable_graphics" = "xno"; then
-  LIBS=$LIBS libpkgr_gfx.la
+  PKGRLIBS=$PKGRLIBS libpkgr_gfx.la
 fi
-AC_SUBST(LIBS)
+AC_SUBST(PKGRLIBS)
 AC_CONFIG_HEADERS([include/pkgr/build-config.h])
 AC_CONFIG_FILES([
   Makefile
