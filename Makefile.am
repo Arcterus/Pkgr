@@ -6,7 +6,7 @@ lib_LTLIBRARIES = libpkgr.la $(PKGRLIBS)
 
 EXTRA_LTLIBRARIES = libpkgr_gfx.la
 
-libpkgr_la_SOURCES = src/lib/checksum.c src/lib/config.c src/lib/download.c src/lib/install.c src/lib/pkgr.c src/lib/uninstall.c src/lib/unpack.c
+libpkgr_la_SOURCES = src/lib/checksum.c src/lib/config.c src/lib/deps.c src/lib/download.c src/lib/install.c src/lib/pkgr.c src/lib/uninstall.c src/lib/unpack.c
 libpkgr_la_LDFLAGS = -version-info 1:0:0
 
 libpkgr_gfx_la_SOURCES = src/gfx/graphics.c

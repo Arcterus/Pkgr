@@ -104,18 +104,16 @@ int pkgr_download_file(const char *url, const char *outfile, bool progbar) {
 }
 
 bool pkgr_download(Package *package) {
+    int i;
     char filename[1048];
     snprintf(filename, sizeof(filename), "/var/lib/pkgr/%s-build.lua", package->name);
-    pkgr_load_pkgbuild(package);
-    lua_getglobal(state, "url");
-    if(!lua_isstring(state, -2)) {
-        pkgr_error(NORMAL "url" BOLD RED " should be a string in %s", filename);
-        return false;
+    for(i = 0; i < pkgr_repo_size; i++) {
+        char url[1055];
+        snprintf(url, sizeof(url), "%s/" TARGET "/%s.kpkg", pkgr_repos[i], package->name);
+        if(!pkgr_download_file(url, filename)) {
+            pkgr_unpack(package);
+            return true;
+        }
     }
-    snprintf(filename, sizeof(filename), "/var/cache/pkgr/%s.kpkg", package->name);
-    if(pkgr_download_file((char *) lua_tostring(state, -2), filename, true)) {
-        return false;
-    } else {
-        return true;
-    }
+    return false;
 }

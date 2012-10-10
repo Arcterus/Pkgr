@@ -1,8 +1,7 @@
 #include <pkgr.h>
-#include <libconfig.h>
 
 /**
- * Load a configuration file.  May be changed to a Lua configuration in the future.
+ * Load a Lua-based configuration file.
  *
  * @param file the configuration file to be loaded
  *
@@ -12,30 +11,26 @@
  * @since 2012-08-01
  */
 void pkgr_load_config(const char *file) {
-    config_t config;
-    config_setting_t *settings;
-    config_init(&config);
-    if(!config_read_file(&config, file)) {
-        pkgr_repos = malloc(32);
+    if(luaL_loadfile(state, filename) || lua_pcall(state, 0, 0, 0)) {
+        pkgr_repos = calloc(1, sizeof(Repo));
         *pkgr_repos = "http://pkgr.org/packages/" TARGET "/";
     } else {
-        settings = config_root_setting(&config);
-        config_setting_t *reposettings = config_setting_get_member(settings, "repos");
-        if(config_setting_is_array(reposettings)) {
-            const char *repostr;
-            int i, reposize = 0, repolength = 0;
-            for(i = 0; (repostr = config_setting_get_string_elem(reposettings, i)) != NULL; i++) {
-                if(strlen(repostr) + repolength > reposize) {
-                    reposize += 1024;
-                    pkgr_repos = realloc(pkgr_repos, reposize);
-                }
-                pkgr_repos[i] = repostr;
-                repolength += strlen(repostr);
+        lua_getglobal(state, "repos");
+        luaL_checktype(state, -1, LUA_TTABLE);
+        int size = luaL_getn(state, -1), i;
+        pkgr_repos = calloc(size, sizeof(Repo));
+        for(i = 1; i <= size; i++) {
+            lua_rawgeti(state, -1, i);
+            if(!lua_isstring(state, -1)) {
+                pkgr_error("All repositories must be strings (%s)", file);
+            } else {
+                const char *str = lua_tostring(state, -1);
+                int index = i - 1;
+                pkgr_repos[index] = malloc(strlen(str));
+                pkgr_repos[index] = str;
+                pkgr_repo_size++;
             }
-        } else {
-            pkgr_repos = malloc(32);
-            *pkgr_repos = "http://pkgr.org/packages/" TARGET "/";
+            lua_pop(state, 1);
         }
     }
-    config_destroy(&config);
 }

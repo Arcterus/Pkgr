@@ -17,15 +17,12 @@ AC_CHECK_HEADERS(curl/curl.h)
 AC_CHECK_HEADERS(sys/ioctl.h)
 AC_CHECK_HEADERS(sys/stat.h)
 AC_CHECK_HEADERS(sys/types.h)
-AC_CHECK_HEADERS(libconfig.h)
-AC_CHECK_LIB(config, config_init)
 AC_CHECK_LIB(curl, curl_easy_init)
 AC_CHECK_LIB(archive, archive_read_new)
 AC_CHECK_LIB(lua, luaL_newstate)
 AC_CHECK_LIB(crypto, OpenSSL_add_all_digests)
 AC_C_CONST
 AC_SUBST(CFLAGS)
-BUILD_OPS="lib cmd"
 AC_ARG_ENABLE([command], AS_HELP_STRING([--disable-command], [disable command-line program]))
 PKGR=pkgr
 if test "x$enable_command" = "xno"; then

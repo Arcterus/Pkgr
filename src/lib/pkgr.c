@@ -11,7 +11,9 @@
  * @date 2012-08-01
  * @since 2012-08-01
  */
-const char **pkgr_repos;
+Repo **pkgr_repos;
+
+int pkgr_repo_size;
 
 /**
  * Prefix to the location in which files will be installed.
@@ -57,6 +59,10 @@ bool pkgr_load_pkgbuild(Package *package) {
  * @since 2012-08-01
  */
 void pkgr_cleanup() {
+    int i;
+    for(i = 0; i < pkgr_repos_length; i++) {
+        free(pkgr_repos[i]);
+    }
     free(pkgr_repos);
     lua_close(state);
 }
@@ -67,11 +73,17 @@ Package *new_Package() {
     return package;
 }
 
+Repo *new_Repo() {
+    Repo *repo = malloc(sizeof(Repo));
+    repo->name = malloc(1024);
+    return repo;
+}
+
 void pkgr_init() {
     gid_t gids[100];
     int gcount;
     if((gcount = getgroups(sizeof(gids) / sizeof(gids[0]), gids)) == -1) {
-        error("Could not determine your group id");
+        pkgr_error("Could not determine your group id");
         return 1;
     } else {
         int i, admin;
@@ -95,6 +107,8 @@ void pkgr_init() {
             }
         }
     }
-    pkgr_load_config("/etc/pkgr.conf");  // I may just use Lua for this.  Less libraries that way...
+    state = create_lua_state();
+    pkgr_load_config("/etc/pkgr.lua");
+    lua_close(state);
     state = create_lua_state();
 }
